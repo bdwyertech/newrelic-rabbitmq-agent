@@ -18,4 +18,4 @@ newrelic:
 agents:
   rabbitmq:
     management_api_url: http://guest:guest@localhost:55672
-    server_name: rabbitmq
+    server_name: SERVER_NAME_HERE

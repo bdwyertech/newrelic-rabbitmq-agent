@@ -1,0 +1,13 @@
+ #!/bin/bash
+ 
+ case $1 in
+    start)
+       echo $$ > /var/run/newrelic-rabbitmq-agent.pid;
+       exec 2>&1 /usr/bin/env ruby newrelic_rabbit_mq_agent.rb 1>/tmp/newrelic-rabbitmq-agent.out 
+       ;;
+     stop)  
+       kill `cat /var/run/newrelic-rabbitmq-agent.pid` ;;
+     *)  
+       echo "usage: newrelic-rabbitmq-agent {start|stop}" ;;
+ esac
+ exit 0

@@ -1,11 +1,3 @@
-#! /usr/bin/env ruby
-
-#
-# This is an example agent which generates synthetic data.
-# A 1mHz (one cycle every 16 minutes) sin+1, cos+1 and sin+5 wave is generated,
-# using the Unix epoch as the base.
-#
-
 require "rubygems"
 require "bundler/setup"
 require "newrelic_plugin"

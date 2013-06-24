@@ -1,14 +1,15 @@
- #!/bin/bash
- PID_FILE=/var/run/newrelic-rabbitmq-agent.pid
+#!/bin/bash
+PID_FILE=/var/run/newrelic-rabbitmq-agent.pid
 
- case $1 in
-    start)
-       echo $$ > $PIDFILE;
-       exec 2>&1 /usr/bin/env ruby newrelic_rabbit_mq_agent.rb 1>/tmp/newrelic-rabbitmq-agent.out 
-       ;;
-     stop)  
-       kill `cat $PIDFILE` ;;
-     *)  
-       echo "usage: newrelic-rabbitmq-agent {start|stop}" ;;
- esac
- exit 0
+case $1 in
+  start)
+     echo $$ > $PID_FILE;
+     cd "$( dirname "${BASH_SOURCE[0]}" )"
+     exec /usr/bin/env ruby newrelic_rabbitmq_agent.rb
+     ;;
+   stop)
+     kill `cat $PID_FILE` ;;
+   *)
+     echo "usage: newrelic-rabbitmq-agent {start|stop}" ;;
+esac
+exit 0

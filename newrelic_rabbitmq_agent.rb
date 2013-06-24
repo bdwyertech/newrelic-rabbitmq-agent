@@ -26,6 +26,6 @@ module NewRelic
     end
 
     NewRelic::Plugin::Setup.install_agent :rabbitmq, self
-  NewRelic::Plugin::Run.setup_and_run
+    NewRelic::Plugin::Run.setup_and_run
   end
 end

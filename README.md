@@ -8,13 +8,13 @@
 
 ## Installation
 * Clone this project into a directory on the target machine. We like /data/newrelic-rabbitmq-agent
-* Copy 'template-newrelic-plugin.yml' to 'newrelic-plugin.yml'
-* Replace YOUR_LICENCE_KEY_HERE with your newrelic licence key and SERVER_NAME_HERE with the name you'd like to see in your NewRelic dashboard.
-* Adjust the management_api_url setting if you're using a different port (RabbitMQ 3.0 uses port 15672) or authentication details.  You can check the management agent is running by issuing a curl -i 'management_api_url' if you're having problems.  Note that the management API requires erlang R14A.
+* Copy `template-newrelic-plugin.yml` to `newrelic-plugin.yml`
+* Replace `YOUR_LICENCE_KEY_HERE` with your newrelic licence key and `SERVER_NAME_HERE` with the name you'd like to see in your NewRelic dashboard.
+* Adjust the management_api_url setting if you're using a different port (RabbitMQ 3.0 uses port 15672) or authentication details.  You can check the management agent is running by issuing a `curl -i <management_api_url>` if you're having problems.  Note that the management API requires erlang R14A.
 * In your chosen directory run:
 
-  $ bundle install
-  $ ./newrelic-rabbitmq-agent start
+      $ bundle install
+      $ ./newrelic-rabbitmq-agent start
 
 
 ## Hardening the installation

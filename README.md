@@ -13,9 +13,8 @@
 * Adjust the management_api_url setting if you're using a different port (RabbitMQ 3.0 uses port 15672) or authentication details.  You can check the management agent is running by issuing a `curl -i <management_api_url>` if you're having problems.  Note that the management API requires erlang R14A.
 * In your chosen directory run:
 
-      $ bundle install
-      $ ./newrelic-rabbitmq-agent start
-
+        $ bundle install
+        $ ./newrelic-rabbitmq-agent start
 
 ## Hardening the installation
 We like things to run by themselves so create a monit script to ensure the agent is always up and running:

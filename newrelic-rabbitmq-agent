@@ -1,5 +1,5 @@
 #!/bin/bash
-PID_FILE=/var/run/newrelic-rabbitmq-agent.pid
+PID_FILE=/var/run/redbubble_workers/newrelic-rabbitmq-agent.pid
 
 case $1 in
   start)

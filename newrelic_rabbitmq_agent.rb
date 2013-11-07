@@ -8,7 +8,7 @@ module NewRelic
   module RabbitMQPlugin
     class Agent < NewRelic::Plugin::Agent::Base
       agent_guid 'com.redbubble.newrelic.plugin.rabbitmq'
-      agent_version '1.1.0'
+      agent_version '1.1.1'
       agent_config_options :management_api_url, :server_name
       agent_human_labels('RabbitMQ') { server_name }
 

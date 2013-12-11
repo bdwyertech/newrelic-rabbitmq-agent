@@ -13,23 +13,34 @@ module NewRelic
       agent_human_labels('RabbitMQ') { server_name }
 
       def poll_cycle
-        rmq_manager.queues.each do |queue|
-          queue_name = queue['name'].split('queue.').last
-          report_metric "Queue Size/#{queue_name}", 'messages', queue['messages']
+		# This version is meant for a consumer view only, not an admin view.  
+		rmq_manager.queues.each do |queue|
+			queue_name = queue['name'].split('queue.').last
+			# Add queue filter for shared rabbit server.
+			
+			report_metric "Queue Size/#{queue_name}", 'Queues', queue['messages']
+			
+			report_metric "Message Rate/Deliver/#{queue_name}", 'messages/sec', per_queue_rate_for('deliver', queue)
+			report_metric "Message Rate/Acknowledge/#{queue_name}", 'messages/sec', per_queue_rate_for('ack', queue)
+			report_metric "Message Rate/Return/#{queue_name}", 'messages/sec', per_queue_rate_for('return_unroutable', queue)  
+			
         end
 
-        report_metric 'Message Rate/Deliver', 'messages/sec', rate_for('deliver')
-        report_metric 'Message Rate/Acknowledge', 'messages/sec', rate_for('ack')
-        report_metric 'Message Rate/Return', 'messages/sec', rate_for('return_unroutable')
-
-        report_metric 'Node/File Descriptors', 'file_descriptors', node_info('fd_used')
-        report_metric 'Node/Sockets', 'sockets', node_info('sockets_used')
-        report_metric 'Node/Erlang Processes', 'processes', node_info('proc_used')
-        report_metric 'Node/Memory Used', 'bytes', node_info('mem_used')
       end
 
       private
 
+	  def per_queue_rate_for(type, queue)
+        msg_stats = queue['message_stats']
+
+        if msg_stats.is_a?(Hash)
+          details = msg_stats["#{type}_details"]
+          details ? details['rate'] : 0
+        else
+          0
+        end
+      end
+	  
       def rate_for(type)
         msg_stats = rmq_manager.overview['message_stats']
 
@@ -39,12 +50,6 @@ module NewRelic
         else
           0
         end
-      end
-
-      def node_info(key)
-        default_node_name = rmq_manager.overview['node']
-        node = rmq_manager.node(default_node_name)
-        node[key]
       end
 
       def rmq_manager

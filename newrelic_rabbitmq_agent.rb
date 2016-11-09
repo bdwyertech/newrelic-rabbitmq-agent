@@ -1,8 +1,9 @@
-require "rubygems"
-require "bundler/setup"
-require "newrelic_plugin"
+#!/usr/bin/env ruby
+# rubocop: disable LineLength
+require 'rubygems'
+require 'bundler/setup'
+require 'newrelic_plugin'
 require 'rabbitmq_manager'
-
 
 module NewRelic
   module RabbitMQPlugin
@@ -13,24 +14,22 @@ module NewRelic
       agent_human_labels('RabbitMQ') { server_name }
 
       def poll_cycle
-		# This version is meant for a consumer view only, not an admin view.  
-		rmq_manager.queues.each do |queue|
-			queue_name = queue['name'].split('queue.').last
-			# Add queue filter for shared rabbit server.
-			
-			report_metric "Queue Size/#{queue_name}", 'Queues', queue['messages']
-			
-			report_metric "Message Rate/Deliver/#{queue_name}", 'messages/sec', per_queue_rate_for('deliver', queue)
-			report_metric "Message Rate/Acknowledge/#{queue_name}", 'messages/sec', per_queue_rate_for('ack', queue)
-			report_metric "Message Rate/Return/#{queue_name}", 'messages/sec', per_queue_rate_for('return_unroutable', queue)  
-			
-        end
+        # => This version is meant for a consumer view only, not an admin view.
+        rmq_manager.queues.each do |queue|
+          queue_name = queue['name'].split('queue.').last
+          # => Add queue filter for shared rabbit server.
 
+          report_metric "Queue Size/#{queue_name}", 'Queues', queue['messages']
+
+          report_metric "Message Rate/Deliver/#{queue_name}", 'messages/sec', per_queue_rate_for('deliver', queue)
+          report_metric "Message Rate/Acknowledge/#{queue_name}", 'messages/sec', per_queue_rate_for('ack', queue)
+          report_metric "Message Rate/Return/#{queue_name}", 'messages/sec', per_queue_rate_for('return_unroutable', queue)
+        end
       end
 
       private
 
-	  def per_queue_rate_for(type, queue)
+      def per_queue_rate_for(type, queue)
         msg_stats = queue['message_stats']
 
         if msg_stats.is_a?(Hash)
@@ -40,7 +39,7 @@ module NewRelic
           0
         end
       end
-	  
+
       def rate_for(type)
         msg_stats = rmq_manager.overview['message_stats']
 

@@ -10,7 +10,7 @@ module NewRelic
     class Agent < NewRelic::Plugin::Agent::Base
       agent_guid 'com.redbubble.newrelic.plugin.rabbitmq'
       agent_version '1.1.1'
-      agent_config_options :management_api_url, :server_name
+      agent_config_options :management_api_url, :server_name, :verify_ssl
       agent_human_labels('RabbitMQ') { server_name }
 
       def poll_cycle
@@ -52,7 +52,7 @@ module NewRelic
       end
 
       def rmq_manager
-        @rmq_manager ||= ::RabbitMQManager.new(management_api_url)
+        @rmq_manager ||= ::RabbitMQManager.new(management_api_url, verify: verify_ssl)
       end
     end
 

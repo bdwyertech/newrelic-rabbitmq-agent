@@ -17,5 +17,6 @@ newrelic:
 #
 agents:
   rabbitmq:
-    management_api_url: http://guest:guest@localhost:55672
+    management_api_url: http://guest:guest@localhost:15672/api/
     server_name: SERVER_NAME_HERE
+    verify_ssl: false

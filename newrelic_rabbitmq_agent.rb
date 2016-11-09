@@ -19,7 +19,7 @@ module NewRelic
           queue_name = queue['name'].split('queue.').last
           # => Add queue filter for shared rabbit server.
 
-          report_metric "Queue Size/#{queue_name}", 'Queues', queue['messages']
+          report_metric "Queue Size/#{queue_name}", 'Queued Messages', queue['messages']
 
           report_metric "Message Rate/Deliver/#{queue_name}", 'messages/sec', per_queue_rate_for('deliver', queue)
           report_metric "Message Rate/Acknowledge/#{queue_name}", 'messages/sec', per_queue_rate_for('ack', queue)

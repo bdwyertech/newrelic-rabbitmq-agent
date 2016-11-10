@@ -25,6 +25,19 @@ module NewRelic
           report_metric "Message Rate/Acknowledge/#{queue_name}", 'messages/sec', per_queue_rate_for('ack', queue)
           report_metric "Message Rate/Return/#{queue_name}", 'messages/sec', per_queue_rate_for('return_unroutable', queue)
         end
+
+        # => Global Metrics
+        report_metric 'Global Queue Size/Total', 'Queued Messages', rmq_manager.overview['queue_totals']['messages'] || 0
+        report_metric 'Global Queue Size/Ready', 'Queued Messages', rmq_manager.overview['queue_totals']['messages_ready'] || 0
+        report_metric 'Global Queue Size/Unacked', 'Queued Messages', rmq_manager.overview['queue_totals']['messages_unacknowledged'] || 0
+
+        report_metric 'Global Message Rate/Deliver', 'messages/sec', rate_for('deliver')
+        report_metric 'Global Message Rate/Acknowledge', 'messages/sec', rate_for('ack')
+        report_metric 'Global Message Rate/Return', 'messages/sec', rate_for('return_unroutable')
+
+        rmq_manager.overview['object_totals'].each do |obj|
+          report_metric "Global Object Totals/#{obj[0].capitalize}", nil, obj[1]
+        end
       end
 
       private
@@ -56,7 +69,10 @@ module NewRelic
       end
     end
 
+    # => Register the Agent
     NewRelic::Plugin::Setup.install_agent :rabbitmq, self
+
+    # => Launch the Agent
     NewRelic::Plugin::Run.setup_and_run
   end
 end
